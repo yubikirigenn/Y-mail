@@ -1,0 +1,105 @@
+{% extends "layout.html" %}
+
+{% block title %}受信トレイ - Y-mail{% endblock %}
+
+{% block content %}
+<h2>受信トレイ ({{ email_address }})</h2>
+<table class="email-table">
+    <thead>
+        <tr>
+            <!-- ↓↓↓ この行のブロックを変更 ↓↓↓ -->
+            <th class="from-col">差出人</th>
+            <th class="subject-col">件名</th>
+            <th class="date-col">日時</th>
+            <!-- ↑↑↑ この行のブロックを変更 ↑↑↑ -->
+        </tr>
+    </thead>
+    <tbody>
+        {% for email in emails %}
+        <tr>
+            <!-- ↓↓↓ この行のブロックを変更 ↓↓↓ -->
+            <td class="from-col">{{ email.from }}</td>
+            <td class="subject-col">
+                <a href="{{ url_for('view_email', email_id=email.id) }}">{{ email.subject or '(件名なし)' }}</a>
+            </td>
+            <td class="date-col">{{ email.date }}</td>
+            <!-- ↑↑↑ この行のブロックを変更 ↑↑↑ -->
+        </tr>
+        {% else %}
+        <tr>
+            <!-- colspanを3に変更 -->
+            <td colspan="3">メールがありません。</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="pagination">
+    {% if page > 1 %}
+        <a href="{{ url_for('inbox', page=page-1) }}">&laquo; 前のページ</a>
+    {% else %}
+        <span class="disabled">&laquo; 前のページ</span>
+    {% endif %}
+    
+    <span>ページ {{ page }} / {{ total_pages }}</span>
+
+    {% if page < total_pages %}
+        <a href="{{ url_for('inbox', page=page+1) }}">次のページ &raquo;</a>
+    {% else %}
+        <span class="disabled">次のページ &raquo;</span>
+    {% endif %}
+</div>
+
+<style>
+    .email-table { 
+        width: 100%; 
+        border-collapse: collapse; 
+        margin-top: 1rem;
+        table-layout: fixed; /* テーブルの幅を固定 */
+    }
+    .email-table th, .email-table td { 
+        border: 1px solid #dee2e6; 
+        padding: 0.75rem; 
+        text-align: left;
+        /* ↓↓↓ 以下3行を追加 ↓↓↓ */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .email-table th { background-color: #f8f9fa; }
+    .email-table tr:nth-child(even) { background-color: #f2f2f2; }
+    .email-table a { text-decoration: none; color: #0056b3; }
+    .email-table a:hover { text-decoration: underline; }
+
+    /* ↓↓↓ カラム幅の調整用スタイルを追加 ↓↓↓ */
+    .from-col { width: 25%; }
+    .subject-col { width: 45%; }
+    .date-col { width: 30%; }
+
+    .pagination {
+        margin-top: 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .pagination a {
+        padding: 0.5rem 1rem;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        color: #007bff;
+        text-decoration: none;
+    }
+    .pagination a:hover {
+        background-color: #e9ecef;
+    }
+    .pagination .disabled {
+        padding: 0.5rem 1rem;
+        color: #6c757d;
+        cursor: not-allowed;
+    }
+    .pagination span {
+        font-size: 0.9rem;
+        color: #6c757d;
+    }
+</style>
+{% endblock %}

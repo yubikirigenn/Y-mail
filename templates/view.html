@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+
+{% block title %}{{ email.subject or '(件名なし)' }}{% endblock %}
+
+{% block content %}
+<div class="email-view">
+    <a href="{{ url_for('inbox') }}">&laquo; 受信トレイに戻る</a>
+    <hr>
+    <div class="email-header">
+        <h2>{{ email.subject or '(件名なし)' }}</h2>
+        <p><strong>差出人:</strong> {{ email.from }}</p>
+        <p><strong>日時:</strong> {{ email.date }}</p>
+    </div>
+    <hr>
+    <div class="email-body">
+        <!-- | safe はHTMLメールを正しく表示するためのおまじない -->
+        {{ email.body | safe }}
+    </div>
+</div>
+
+<style>
+    .email-view {
+        word-wrap: break-word;
+    }
+    .email-header {
+        margin-bottom: 1.5rem;
+    }
+    .email-header h2 {
+        font-size: 1.8rem;
+        margin-bottom: 0.5rem;
+    }
+    .email-header p {
+        margin: 0.2rem 0;
+        color: #555;
+    }
+    .email-body {
+        line-height: 1.6;
+        font-size: 1rem;
+        padding-top: 1rem;
+        overflow-x: auto; /* 横長のメールがはみ出ないように */
+    }
+    .email-body a {
+        color: #007bff;
+    }
+</style>
+{% endblock %}

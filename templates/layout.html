@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Y-mail{% endblock %}</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; margin: 0; background-color: #f8f9fa; display: flex; flex-direction: column; min-height: 100vh; }
+        .navbar { background-color: #fff; border-bottom: 1px solid #dee2e6; padding: 0.5rem 1rem; display: flex; justify-content: space-between; align-items: center; }
+        .navbar a { text-decoration: none; color: #007bff; }
+        .navbar .brand { font-size: 1.25rem; }
+        .container { max-width: 960px; margin: 2rem auto; padding: 2rem; background-color: #fff; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); flex-grow: 1; }
+        .content { margin-top: 1rem; }
+        
+        /* ↓↓↓ フッター用のスタイルを追加 ↓↓↓ */
+        .footer {
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: auto;
+            font-size: 0.8rem;
+            color: #b0b0b0; /* 目立たないように薄い灰色に */
+        }
+        /* ↑↑↑ ここまで ↑↑↑ */
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="{{ url_for('home') }}" class="brand">Y-mail</a>
+        <div>
+            {% if session['credentials'] %}
+            <span style="margin-right: 1rem; color: #6c757d;">{{ session['credentials'].email_address }}</span>
+            <a href="{{ url_for('inbox') }}">受信トレイ</a> &nbsp;
+            <a href="{{ url_for('logout') }}">ログアウト</a>
+            {% endif %}
+        </div>
+    </nav>
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- ↓↓↓ フッターを追加 ↓↓↓ -->
+    <footer class="footer">
+        <p>Version 1.0.0</p>
+    </footer>
+    <!-- ↑↑↑ ここまで ↑↑↑ -->
+</body>
+</html>
